@@ -23,7 +23,7 @@
     }
   ],
   "config": {
-    "vendor-dir": "src/esasby.hutkigrosh/install/php_interface/include/sale_payment/hutkigrosh/vendor"
+    "vendor-dir": "src/esas.hutkigrosh/install/php_interface/include/sale_payment/hutkigrosh/vendor"
   },
   "license": "MIT",
   "autoload": {
