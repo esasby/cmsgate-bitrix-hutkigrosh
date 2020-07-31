@@ -11,19 +11,18 @@
 1. Введите в поиске _Hutkigrosh_
 1. Установите решение
 ### Ручная установка
-1. Загрузите архив модуля [esas.hutkigrosh.zip](https://bitbucket.esas.by/projects/CG/repos/cmsgate-bitrix-hutkigrosh/browse/esas.hutkigrosh.zip)
+1. Загрузите архив модуля [esas.hutkigrosh.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/esas.hutkigrosh.zip)
 (кодировка cp-1251) 
 1. Распакуйте архив в папку 
 ```/bitrix/modules/```
 После распаковки должна появиться папка 
-```/bitrix/modules/esasby.hutkigrosh```
+```/bitrix/modules/esas.hutkigrosh```
 1. Перейти на страницу _Marketplace > Установленные решения_ (/bitrix/admin/partner_modules.php)
 1. В контекстном меню решения esasby.hutkigrosh выбрать "Установить".
 
 ## Инструкция по настройке
 1. Перейти на страницу _Магазин > Настройки > Платежные системы_ (/bitrix/admin/sale_pay_system.php)
 1. В контекстном меню платежной системы "ХуткiГрош" выбрать "Изменить". 
-1. Загрузить логотип для платежной системы ```hgrosh.png``` (находится в архиве с модулем)
 1. В секции _"Настройка обработчика ПС"_ укажите обязательные параметры
     * Уникальный идентификатор услуги ЕРИП – ID ЕРИП услуги
     * Логин интернет-магазина – логин в системе ХуткiГрош.
