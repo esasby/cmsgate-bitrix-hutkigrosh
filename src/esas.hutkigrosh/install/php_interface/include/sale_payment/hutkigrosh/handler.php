@@ -20,7 +20,7 @@ use esas\cmsgate\hutkigrosh\RegistryHutkigrosh;
 use esas\cmsgate\hutkigrosh\utils\RequestParamsHutkigrosh;
 use esas\cmsgate\Registry;
 use esas\cmsgate\utils\Logger;
-use esas\hutkigrosh\controllers\ControllerHutkigroshNotifyBitrix;
+use esas\controllers\hutkigrosh\ControllerHutkigroshNotifyBitrix;
 use Exception;
 use Throwable;
 
@@ -38,7 +38,7 @@ class HutkigroshHandler extends CmsgateServiceHandler
             try {
 //    $order = Order::load($GLOBALS["SALE_INPUT_PARAMS"]["ORDER"]["ID"]);
                 $configWrapper = RegistryHutkigrosh::getRegistry()->getConfigWrapper();
-                $orderWrapper = Registry::getRegistry()->getOrderWrapperForCurrentUser();
+                $orderWrapper = Registry::getRegistry()->getOrderWrapperByOrderNumber($payment->getOrderId());
                 // проверяем, привязан ли к заказу extId, если да,
                 // то счет не выставляем, а просто прорисовываем старницу
                 if (empty($orderWrapper->getExtId())) {

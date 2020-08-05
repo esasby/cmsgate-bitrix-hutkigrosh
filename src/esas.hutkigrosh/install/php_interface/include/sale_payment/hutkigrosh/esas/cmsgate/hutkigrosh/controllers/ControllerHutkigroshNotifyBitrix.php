@@ -1,6 +1,6 @@
 <?php
 
-namespace esas\hutkigrosh\controllers;
+namespace esas\controllers\hutkigrosh;
 
 use CSaleOrder;
 use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshNotify;
