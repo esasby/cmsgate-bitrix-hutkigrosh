@@ -11,7 +11,7 @@
 1. Введите в поиске _Hutkigrosh_
 1. Установите решение
 ### Ручная установка
-1. Загрузите архив модуля [esas.hutkigrosh.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/esas.hutkigrosh.zip)
+1. Загрузите архив модуля [esas.hutkigrosh.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/raw/master/esas.hutkigrosh.zip)
 (кодировка cp-1251) 
 1. Распакуйте архив в папку 
 ```/bitrix/modules/```
