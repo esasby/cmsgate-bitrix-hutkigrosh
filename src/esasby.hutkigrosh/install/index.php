@@ -1,9 +1,9 @@
 <?
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esas.hutkigrosh/install/php_interface/include/sale_payment/hutkigrosh/init.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/install/php_interface/include/sale_payment/hutkigrosh/init.php");
 use esas\cmsgate\bitrix\CmsgateCModule;
 
 if(class_exists('esas_hutkigrosh')) return;
-class esas_hutkigrosh extends CmsgateCModule
+class esasby_hutkigrosh extends CmsgateCModule
 {
     protected function addFilesToInstallList()
     {
