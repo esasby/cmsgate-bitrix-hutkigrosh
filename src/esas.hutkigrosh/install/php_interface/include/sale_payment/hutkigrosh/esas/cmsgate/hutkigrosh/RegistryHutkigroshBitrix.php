@@ -73,7 +73,7 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
     {
         return new ModuleDescriptor(
             "esas.hutkigrosh",
-            new VersionDescriptor("1.10.0", "2020-08-05"),
+            new VersionDescriptor("3.0.0", "2020-08-18"),
             "Прием платежей через ЕРИП (ХуткiГрош)",
             "https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/",
             VendorDescriptor::esas(),
