@@ -1,15 +1,82 @@
 <?
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/install/php_interface/include/sale_payment/hutkigrosh/init.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/install/php_interface/include/sale_payment/esasby_hutkigrosh/init.php");
 use esas\cmsgate\bitrix\CmsgateCModule;
+use esas\cmsgate\Registry;
 
-if(class_exists('esas_hutkigrosh')) return;
-class esasby_hutkigrosh extends CmsgateCModule
+if(class_exists('esasby_hutkigrosh')) return;
+class esasby_hutkigrosh extends CModule
 {
-    protected function addFilesToInstallList()
+    var $MODULE_PATH;
+    var $MODULE_ID = 'esasby.hutkigrosh';
+    var $MODULE_VERSION = '';
+    var $MODULE_VERSION_DATE;
+    var $MODULE_NAME;
+    var $MODULE_DESCRIPTION;
+    var $MODULE_GROUP_RIGHTS = 'Y';
+    var $PARTNER_NAME;
+    var $PARTNER_URI;
+    /**
+     * @var \esas\cmsgate\bitrix\CmsgateCModule
+     */
+    protected $installHelper;
+
+    /**
+     * CmsgateCModule constructor.
+     */
+    public function __construct()
     {
-        parent::addFilesToInstallList();
-        $this->installFilesList[] = "/tools/sale_ps_hutkigrosh_ajax.php";
+        $this->installHelper = new CmsgateCModule();
+        $this->installHelper->addFilesToInstallList(["/tools/sale_ps_hutkigrosh_ajax.php"]);
+
+        $this->MODULE_PATH = $_SERVER['DOCUMENT_ROOT'] . '/bitrix' . CmsgateCModule::MODULE_SUB_PATH . $this->installHelper->getModuleActionName();
+        $this->MODULE_VERSION = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getVersion();
+        $this->MODULE_VERSION_DATE = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getDate();
+        $this->MODULE_NAME = Registry::getRegistry()->getModuleDescriptor()->getModuleFullName();
+        $this->MODULE_DESCRIPTION = Registry::getRegistry()->getModuleDescriptor()->getModuleDescription();
+        $this->PARTNER_NAME = "esasby";
+        $this->PARTNER_URI = "esas.by";
+
+        CModule::IncludeModule("sale");
     }
 
 
+    function InstallDB($arParams = array())
+    {
+        return $this->installHelper->InstallDB($arParams);
+    }
+
+    function UnInstallDB($arParams = array())
+    {
+        return $this->installHelper->UnInstallDB($arParams);
+    }
+
+    function InstallEvents()
+    {
+        return $this->installHelper->InstallEvents();
+    }
+
+    function UnInstallEvents()
+    {
+        return $this->installHelper->UnInstallEvents();
+    }
+
+    function InstallFiles($arParams = array())
+    {
+        return $this->installHelper->InstallFiles();
+    }
+
+    function UnInstallFiles()
+    {
+        return $this->installHelper->UnInstallFiles();
+    }
+
+    function DoInstall()
+    {
+        return $this->installHelper->DoInstall();
+    }
+
+    function DoUninstall()
+    {
+        return $this->installHelper->DoUninstall();
+    }
 }

@@ -2,29 +2,28 @@
 
 namespace Sale\Handlers\PaySystem;
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/php_interface/include/sale_payment/hutkigrosh/init.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/php_interface/include/sale_payment/esasby_hutkigrosh/init.php");
 
 use Bitrix\Main\Error;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Request;
+use Bitrix\Main\Type\DateTime;
 use Bitrix\Sale\Payment;
 use Bitrix\Sale\PaySystem;
 use Bitrix\Sale\PaySystem\ServiceResult;
 use CSaleOrder;
-use Bitrix\Main\Type\DateTime;
 use esas\cmsgate\bitrix\CmsgateServiceHandler;
 use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshAddBill;
 use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshCompletionPage;
 use esas\cmsgate\hutkigrosh\RegistryHutkigrosh;
 use esas\cmsgate\hutkigrosh\utils\RequestParamsHutkigrosh;
 use esas\cmsgate\Registry;
-use esas\cmsgate\utils\Logger;
 use esas\controllers\hutkigrosh\ControllerHutkigroshNotifyBitrix;
 use Exception;
 use Throwable;
 
-class HutkigroshHandler extends CmsgateServiceHandler
+class esasby_hutkigroshHandler extends CmsgateServiceHandler
 {
     /**
      * @param Payment $payment
@@ -67,7 +66,7 @@ class HutkigroshHandler extends CmsgateServiceHandler
      * @param Request $request
      * @return mixed
      */
-    public function getPaymentIdFromRequest(Request $request)
+    public function getPaymentIdFromRequestSafe(Request $request)
     {
         $dbOrder = CSaleOrder::GetList(
             array("DATE_UPDATE" => "DESC"),
@@ -84,8 +83,7 @@ class HutkigroshHandler extends CmsgateServiceHandler
                 '=ORDER_ID' => $arOrder["ID"],
             ]
         ]);
-        while ($item = $dbPayment->fetch())
-        {
+        while ($item = $dbPayment->fetch()) {
             return $item["ID"];
         }
         return ""; //check
@@ -97,31 +95,25 @@ class HutkigroshHandler extends CmsgateServiceHandler
      * @return PaySystem\ServiceResult
      * @throws Exception
      */
-    public function processRequest(Payment $payment, Request $request)
+    public function processRequestSafe(Payment $payment, Request $request)
     {
         $result = new PaySystem\ServiceResult();
 
-        try {
-            $controller = new ControllerHutkigroshNotifyBitrix();
-            $billInfoRs = $controller->process();
-            if ($billInfoRs != null) {
-                $fields = array(
-                    "PS_STATUS" => "Y",
-                    "PS_STATUS_CODE" => $billInfoRs->getResponseCode(),
-                    "PS_STATUS_DESCRIPTION" => $billInfoRs->getResponseMessage(),
-                    "PS_STATUS_MESSAGE" => "",
-                    "PS_SUM" => $billInfoRs->getAmount()->getValue(),
-                    "PS_CURRENCY" => $billInfoRs->getAmount()->getCurrency(),
-                    "PS_RESPONSE_DATE" => new DateTime(),
-                );
-                $result->setPsData($fields);
-            }
-            $result->setOperationType(PaySystem\ServiceResult::MONEY_COMING);
-        } catch (Throwable $e) {
-            Logger::getLogger("notify")->error("Exception:", $e);
-            $result->addError(new Error($e->getMessage()));
+        $controller = new ControllerHutkigroshNotifyBitrix();
+        $billInfoRs = $controller->process();
+        if ($billInfoRs != null) {
+            $fields = array(
+                "PS_STATUS" => "Y",
+                "PS_STATUS_CODE" => $billInfoRs->getResponseCode(),
+                "PS_STATUS_DESCRIPTION" => $billInfoRs->getResponseMessage(),
+                "PS_STATUS_MESSAGE" => "",
+                "PS_SUM" => $billInfoRs->getAmount()->getValue(),
+                "PS_CURRENCY" => $billInfoRs->getAmount()->getCurrency(),
+                "PS_RESPONSE_DATE" => new DateTime(),
+            );
+            $result->setPsData($fields);
         }
-
+        $result->setOperationType(PaySystem\ServiceResult::MONEY_COMING);
         return $result;
     }
 

@@ -8,6 +8,7 @@
 
 namespace esas\cmsgate\hutkigrosh;
 
+use Bitrix\Main\Localization\Loc;
 use esas\cmsgate\CmsConnectorBitrix;
 use esas\cmsgate\descriptors\ModuleDescriptor;
 use esas\cmsgate\descriptors\VendorDescriptor;
@@ -18,6 +19,7 @@ use esas\cmsgate\view\admin\AdminViewFields;
 use CMain;
 use COption;
 use esas\cmsgate\view\admin\ConfigFormBitrix;
+Loc::loadMessages(__FILE__);
 
 class RegistryHutkigroshBitrix extends RegistryHutkigrosh
 {
@@ -73,11 +75,11 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
     {
         return new ModuleDescriptor(
             "esasby.hutkigrosh", // код должен совпадать с кодом решения в маркете
-            new VersionDescriptor("3.0.0", "2020-08-18"),
-            "Прием платежей через ЕРИП (ХуткiГрош)",
+            new VersionDescriptor("3.0.2", "2020-08-24"),
+            Loc::getMessage(AdminViewFields::ADMIN_PAYMENT_METHOD_NAME),
             "https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/",
             VendorDescriptor::esas(),
-            "Выставление пользовательских счетов в ЕРИП"
+            Loc::getMessage(AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION)
         );
     }
 
