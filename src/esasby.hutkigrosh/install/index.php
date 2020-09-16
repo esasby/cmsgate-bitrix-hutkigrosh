@@ -1,9 +1,12 @@
 <?
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/install/php_interface/include/sale_payment/esasby_hutkigrosh/init.php");
+
 use esas\cmsgate\bitrix\CmsgateCModule;
+use esas\cmsgate\bitrix\CmsgatePaysystem;
 use esas\cmsgate\Registry;
 
-if(class_exists('esasby_hutkigrosh')) return;
+if (class_exists('esasby_hutkigrosh')) return;
+
 class esasby_hutkigrosh extends CModule
 {
     var $MODULE_PATH;
@@ -25,8 +28,19 @@ class esasby_hutkigrosh extends CModule
      */
     public function __construct()
     {
-        $this->installHelper = new CmsgateCModule();
-        $this->installHelper->addFilesToInstallList(["/tools/sale_ps_hutkigrosh_ajax.php"]);
+        CModule::IncludeModule("sale");
+        $this->installHelper = (new CmsgateCModule())
+            ->addToInstallFilesList("/tools/sale_ps_hutkigrosh_ajax.php")
+            ->addToInstallFilesList(CmsgateCModule::MODULE_SUB_PATH . "esasby_webpay")
+            ->addToInstallFilesList(CmsgateCModule::MODULE_IMAGES_SUB_PATH . "esasby_webpay.png");
+
+        $webpayPS = new CmsgatePaysystem();
+        $webpayPS
+            ->setName("Оплата картой")
+            ->setDescription("Онлайн оплата картой Visa, MasterCard, Белкарт")
+            ->setType("ORDER")
+            ->setActionFile("esasby_webpay");
+        $this->installHelper->addToInstallPaySystemsList($webpayPS);
 
         $this->MODULE_PATH = $_SERVER['DOCUMENT_ROOT'] . '/bitrix' . CmsgateCModule::MODULE_SUB_PATH . $this->installHelper->getModuleActionName();
         $this->MODULE_VERSION = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getVersion();
@@ -35,8 +49,6 @@ class esasby_hutkigrosh extends CModule
         $this->MODULE_DESCRIPTION = Registry::getRegistry()->getModuleDescriptor()->getModuleDescription();
         $this->PARTNER_NAME = "esasby";
         $this->PARTNER_URI = "esas.by";
-
-        CModule::IncludeModule("sale");
     }
 
 
