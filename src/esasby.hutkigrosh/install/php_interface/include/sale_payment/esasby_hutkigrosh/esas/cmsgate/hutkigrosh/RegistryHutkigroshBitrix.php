@@ -75,7 +75,7 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
     {
         return new ModuleDescriptor(
             "esasby.hutkigrosh", // код должен совпадать с кодом решения в маркете
-            new VersionDescriptor("3.13.0", "2020-09-16"),
+            new VersionDescriptor("3.14.0", "2020-10-16"),
             Loc::getMessage(AdminViewFields::ADMIN_PAYMENT_METHOD_NAME),
             "https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/",
             VendorDescriptor::esas(),
