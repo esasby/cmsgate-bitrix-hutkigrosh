@@ -48,7 +48,9 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
             [
                 ConfigFieldsHutkigrosh::shopName(),
                 ConfigFieldsHutkigrosh::paymentMethodName(),
-                ConfigFieldsHutkigrosh::paymentMethodDetails()
+                ConfigFieldsHutkigrosh::paymentMethodNameWebpay(),
+                ConfigFieldsHutkigrosh::paymentMethodDetails(),
+                ConfigFieldsHutkigrosh::paymentMethodDetailsWebpay(),
             ]);
         $configForm = new ConfigFormBitrix(
             AdminViewFields::CONFIG_FORM_COMMON,
@@ -57,13 +59,13 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
     }
 
 
-    function getUrlAlfaclick($orderId)
+    function getUrlAlfaclick($orderWrapper)
     {
         return
             "/bitrix/tools/sale_ps_hutkigrosh_ajax.php";
     }
 
-    function getUrlWebpay($orderId)
+    function getUrlWebpay($orderWrapper)
     {
         global $APPLICATION;
         return (CMain::IsHTTPS() ? "https" : "http")
@@ -75,7 +77,7 @@ class RegistryHutkigroshBitrix extends RegistryHutkigrosh
     {
         return new ModuleDescriptor(
             "esasby.hutkigrosh", // код должен совпадать с кодом решения в маркете
-            new VersionDescriptor("3.14.0", "2020-10-16"),
+            new VersionDescriptor("3.14.1", "2021-01-14"),
             Loc::getMessage(AdminViewFields::ADMIN_PAYMENT_METHOD_NAME),
             "https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/src/master/",
             VendorDescriptor::esas(),

@@ -12,14 +12,14 @@ use Bitrix\Main\Type\DateTime;
 use Bitrix\Sale\Payment;
 use Bitrix\Sale\PaySystem;
 use Bitrix\Sale\PaySystem\ServiceResult;
-use CSaleOrder;
 use esas\cmsgate\bitrix\CmsgateServiceHandler;
 use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshAddBill;
 use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshCompletionPage;
+use esas\cmsgate\hutkigrosh\protocol\HutkigroshBillInfoRs;
 use esas\cmsgate\hutkigrosh\RegistryHutkigrosh;
-use esas\cmsgate\hutkigrosh\utils\RequestParamsHutkigrosh;
 use esas\cmsgate\Registry;
-use esas\controllers\hutkigrosh\ControllerHutkigroshNotifyBitrix;
+use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshNotifyBitrix;
+use esas\cmsgate\utils\CMSGateException;
 use Exception;
 use Throwable;
 
@@ -68,25 +68,16 @@ class esasby_hutkigroshHandler extends CmsgateServiceHandler
      */
     public function getPaymentIdFromRequestSafe(Request $request)
     {
-        $dbOrder = CSaleOrder::GetList(
-            array("DATE_UPDATE" => "DESC"),
-            array(
-                "COMMENTS" => $request->get(RequestParamsHutkigrosh::PURCHASE_ID)
-            )
-        );
-        /** @var TYPE_NAME $arOrder */
-        $arOrder = $dbOrder->GetNext();
+        $controller = new ControllerHutkigroshNotifyBitrix();
+        $billInfoRs = $controller->process();
+        CMSGateException::throwIfNull($billInfoRs, "Hutkigrosh get bill rs is null");
+        $_SESSION["bill_info_rs"] = $billInfoRs; // для корректной работы processRequest
 
-        $dbPayment = \Bitrix\Sale\PaymentCollection::getList([
-            'select' => ['ID'],
-            'filter' => [
-                '=ORDER_ID' => $arOrder["ID"],
-            ]
-        ]);
-        while ($item = $dbPayment->fetch()) {
-            return $item["ID"];
+        $orderWrapper = Registry::getRegistry()->getOrderWrapperByOrderNumberOrId($billInfoRs->getOrderId());
+        if ($orderWrapper != null) {
+            return $orderWrapper->getOrderId();
         }
-        return ""; //check
+        throw new CMSGateException("Can not find payments for order[" . $billInfoRs->getOrderId() . "]");
     }
 
     /**
@@ -99,11 +90,12 @@ class esasby_hutkigroshHandler extends CmsgateServiceHandler
     {
         $result = new PaySystem\ServiceResult();
 
-        $controller = new ControllerHutkigroshNotifyBitrix();
-        $billInfoRs = $controller->process();
+        /** @var HutkigroshBillInfoRs $billInfoRs */
+        $billInfoRs = $_SESSION["bill_info_rs"];
+        CMSGateException::throwIfNull($billInfoRs, "Epos invoice is not loaded");
         if ($billInfoRs != null) {
             $fields = array(
-                "PS_STATUS" => "Y",
+                "PS_STATUS" => $billInfoRs->isStatusPayed() ? "Y" : "N",
                 "PS_STATUS_CODE" => $billInfoRs->getResponseCode(),
                 "PS_STATUS_DESCRIPTION" => $billInfoRs->getResponseMessage(),
                 "PS_STATUS_MESSAGE" => "",

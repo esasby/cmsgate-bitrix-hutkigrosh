@@ -1,8 +1,9 @@
 <?
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/install/php_interface/include/sale_payment/esasby_hutkigrosh/init.php");
 
-use esas\cmsgate\bitrix\CmsgateCModule;
 use esas\cmsgate\bitrix\CmsgatePaysystem;
+use esas\cmsgate\bitrix\InstallHelper;
+use esas\cmsgate\CmsConnectorBitrix;
 use esas\cmsgate\Registry;
 
 if (class_exists('esasby_hutkigrosh')) return;
@@ -29,11 +30,9 @@ class esasby_hutkigrosh extends CModule
     public function __construct()
     {
         CModule::IncludeModule("sale");
-        $this->installHelper = (new CmsgateCModule())
-            ->addToInstallFilesList("/tools/sale_ps_hutkigrosh_ajax.php")
-            ->addToInstallFilesList(CmsgateCModule::MODULE_SUB_PATH . "esasby_webpay")
-            ->addToInstallFilesList(CmsgateCModule::MODULE_IMAGES_SUB_PATH . "esasby_webpay.png");
-
+        $this->installHelper = new InstallHelper($this);
+        $this->installHelper->createAndAddMainPaySystem();
+        $this->installHelper->addToInstallFilesList("/tools/sale_ps_hutkigrosh_ajax.php");
         $webpayPS = new CmsgatePaysystem();
         $webpayPS
             ->setName("Оплата картой")
@@ -42,44 +41,13 @@ class esasby_hutkigrosh extends CModule
             ->setActionFile("esasby_webpay");
         $this->installHelper->addToInstallPaySystemsList($webpayPS);
 
-        $this->MODULE_PATH = $_SERVER['DOCUMENT_ROOT'] . '/bitrix' . CmsgateCModule::MODULE_SUB_PATH . $this->installHelper->getModuleActionName();
+        $this->MODULE_PATH = $_SERVER['DOCUMENT_ROOT'] . '/bitrix' . InstallHelper::MODULE_SUB_PATH . CmsConnectorBitrix::getInstance()->getModuleActionName();
         $this->MODULE_VERSION = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getVersion();
         $this->MODULE_VERSION_DATE = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getDate();
         $this->MODULE_NAME = Registry::getRegistry()->getModuleDescriptor()->getModuleFullName();
         $this->MODULE_DESCRIPTION = Registry::getRegistry()->getModuleDescriptor()->getModuleDescription();
         $this->PARTNER_NAME = "esasby";
         $this->PARTNER_URI = "esas.by";
-    }
-
-
-    function InstallDB($arParams = array())
-    {
-        return $this->installHelper->InstallDB($arParams);
-    }
-
-    function UnInstallDB($arParams = array())
-    {
-        return $this->installHelper->UnInstallDB($arParams);
-    }
-
-    function InstallEvents()
-    {
-        return $this->installHelper->InstallEvents();
-    }
-
-    function UnInstallEvents()
-    {
-        return $this->installHelper->UnInstallEvents();
-    }
-
-    function InstallFiles($arParams = array())
-    {
-        return $this->installHelper->InstallFiles();
-    }
-
-    function UnInstallFiles()
-    {
-        return $this->installHelper->UnInstallFiles();
     }
 
     function DoInstall()
