@@ -65,6 +65,13 @@ http://mydomen.my/bitrix/tools/sale_ps_result.php?handler=esasby.hutkigrosh
  * включите в настройках модуля тестовый режим 
  * для эмуляции оплаты клиентом выставленного счета воспльзуйтесь личным кабинетом [тестовой системы](https://trial.hgrosh.by) (меню _Тест оплаты ЕРИП_)
 
+### Сборка плагина
+```
+> composer global require humbug/php-scoper
+> hp-scoper add-prefix
+> composer dump-autoload --working-dir build --classmap-authoritativ
+```
+
 _Разработано и протестировано с 1С-Битрикс: Управление сайтом 17.0.9_
 
 
