@@ -46,6 +46,8 @@ class esasby_hutkigrosh extends CModule
         $this->MODULE_VERSION_DATE = Registry::getRegistry()->getModuleDescriptor()->getVersion()->getDate();
         $this->MODULE_NAME = Registry::getRegistry()->getModuleDescriptor()->getModuleFullName();
         $this->MODULE_DESCRIPTION = Registry::getRegistry()->getModuleDescriptor()->getModuleDescription();
+        $this->PARTNER_NAME = "esasby"; // for bitrix marketplace
+        $this->PARTNER_URI = "esas.by"; // for bitrix marketplace
         $this->PARTNER_NAME = Registry::getRegistry()->getModuleDescriptor()->getVendor()->getFullName();
         $this->PARTNER_URI = Registry::getRegistry()->getModuleDescriptor()->getVendor()->getUrl();
     }

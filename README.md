@@ -11,8 +11,9 @@
 1. Введите в поиске _Hutkigrosh_
 1. Установите решение
 ### Ручная установка
-1. Загрузите архив модуля [esasby.hutkigrosh.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/raw/master/esasby.hutkigrosh.zip)
-(кодировка UTF-8) 
+1. Загрузите архив модуля:
+    * [esasby.hutkigrosh.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/raw/master/esasby.hutkigrosh.zip) (кодировка UTF-8) 
+    * [esasby.hutkigrosh_cp1251.zip](https://bitbucket.org/esasby/cmsgate-bitrix-hutkigrosh/raw/master/esasby.hutkigrosh_cp1251.zip) (кодировка windows-1251) 
 1. Распакуйте архив в папку 
 ```/bitrix/modules/```
 После распаковки должна появиться папка 
@@ -68,8 +69,8 @@ http://mydomen.my/bitrix/tools/sale_ps_result.php?handler=esasby.hutkigrosh
 ### Сборка плагина
 ```
 > composer global require humbug/php-scoper
-> hp-scoper add-prefix
-> composer dump-autoload --working-dir build --classmap-authoritativ
+> php-scoper add-prefix
+> composer dump-autoload --working-dir build --classmap-authoritative
 ```
 
 _Разработано и протестировано с 1С-Битрикс: Управление сайтом 17.0.9_
