@@ -17,7 +17,7 @@ use esas\cmsgate\hutkigrosh\controllers\ControllerHutkigroshWebpayForm;
 use esas\cmsgate\Registry;
 use Throwable;
 
-class esasby_webpayHandler extends esasby_hutkigroshHandler
+class esasby_hutkigrosh_webpayHandler extends esasby_hutkigroshHandler
 {
     /**
      * @param Payment $payment

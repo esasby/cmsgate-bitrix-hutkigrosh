@@ -4,6 +4,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/esasby.hutkigrosh/inst
 use esas\cmsgate\bitrix\CmsgatePaysystem;
 use esas\cmsgate\bitrix\InstallHelper;
 use esas\cmsgate\CmsConnectorBitrix;
+use esas\cmsgate\hutkigrosh\ConfigFieldsHutkigrosh;
 use esas\cmsgate\Registry;
 
 if (class_exists('esasby_hutkigrosh')) return;
@@ -35,10 +36,10 @@ class esasby_hutkigrosh extends CModule
         $this->installHelper->addToInstallFilesList("/tools/sale_ps_hutkigrosh_ajax.php");
         $webpayPS = new CmsgatePaysystem();
         $webpayPS
-            ->setName("Оплата картой")
-            ->setDescription("Онлайн оплата картой Visa, MasterCard, Белкарт")
+            ->setName(Registry::getRegistry()->getTranslator()->getConfigFieldDefault(ConfigFieldsHutkigrosh::paymentMethodNameWebpay()))
+            ->setDescription(Registry::getRegistry()->getTranslator()->getConfigFieldDefault(ConfigFieldsHutkigrosh::paymentMethodDetailsWebpay()))
             ->setType("ORDER")
-            ->setActionFile("esasby_webpay");
+            ->setActionFile("esasby_hutkigrosh_webpay");
         $this->installHelper->addToInstallPaySystemsList($webpayPS);
 
         $this->MODULE_PATH = $_SERVER['DOCUMENT_ROOT'] . '/bitrix' . InstallHelper::MODULE_SUB_PATH . CmsConnectorBitrix::getInstance()->getModuleActionName();
